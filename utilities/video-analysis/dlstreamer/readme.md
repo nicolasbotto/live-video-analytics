@@ -130,6 +130,8 @@ You can view the video passing through the GStreamer pipeline by opening a brows
 
 Read the [documentation](https://github.com/opencv/gst-video-analytics/wiki/Elements) for DLStreamer GStreamer plugins to understand what plugins are available and how they work.
 
+To view the results, follow the steps outlined in the previous section to view the MJPEG stream with bounding boxes of detected objects. You can also view the [inference events using Visual Studio Code](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/use-your-model-quickstart#interpret-results).
+
 ### Object detection
 
 To perform object detection we can use [gvadetect](https://github.com/opencv/gst-video-analytics/wiki/gvadetect) plugin. For that, use the following value for GST_LVA_PIPELINE environment variable
@@ -188,7 +190,45 @@ GST_LVA_PIPELINE=appsrc name=lvasource ! videoconvert ! gvadetect model=/data/mo
 
 In the above pipeline we are using a model that performs person, vehicle, and bike detection. This model was specified in models.lst file (found in models directory) and was downloaded when you ran the docker build command.
 
-To view the results of the above command, follow the steps outlined in the previous section to view the MJPEG stream with bounding boxes of detected objects. You can also view the [inference events using Visual Studio Code](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/use-your-model-quickstart#interpret-results).
+#### Inference event output:
+```json
+[IoTHubMonitor] [11:24:53 PM] Message received from [gstreamer/lvaEdge]:
+{
+  "body": {
+    "timestamp": 143871362408533,
+    "inferences": [
+      {
+        "type": "entity",
+        "subtype": "",
+        "inferenceId": "",
+        "relatedInferences": [],
+        "entity": {
+          "tag": {
+            "value": "vehicle",
+            "confidence": 0.6820264
+          },
+          "attributes": [],
+          "box": {
+            "l": 0.5625,
+            "t": 0.59166664,
+            "w": 0.0546875,
+            "h": 0.047222223
+          }
+        },
+        "extensions": {},
+        "valueCase": "entity"
+      }
+    ]
+  },
+  "applicationProperties": {
+    "topic": "/subscriptions/86fe5e45-3696-4c0e-b88a-cf350e31ee68/resourceGroups/nicob-lva-sample-resources/providers/microsoft.media/mediaservices/lvasamplek52hdtilb45jm",
+    "subject": "/graphInstances/SampleGraph1/processors/grpcExtension",
+    "eventType": "Microsoft.Media.Graph.Analytics.Inference",
+    "eventTime": "2020-08-27T23:24:53.428Z",
+    "dataVersion": "1.0"
+  }
+}
+```
 
 ### Object detection and classification
 
@@ -249,6 +289,57 @@ GST_LVA_PIPELINE=appsrc name=lvasource ! videoconvert ! gvadetect model=/data/mo
 
 The above pipeline detects person, vehicles, and bikes, and performs classification on detected vehicles.
 
+#### Inference event output:
+```json
+[IoTHubMonitor] [11:31:50 PM] Message received from [gstreamer/lvaEdge]:
+{
+  "body": {
+    "timestamp": 143871399888155,
+    "inferences": [
+      {
+        "type": "entity",
+        "subtype": "",
+        "inferenceId": "",
+        "relatedInferences": [],
+        "entity": {
+          "tag": {
+            "value": "vehicle",
+            "confidence": 0.66931343
+          },
+          "attributes": [
+            {
+              "name": "color",
+              "value": "gray",
+              "confidence": 0.8392091
+            },
+            {
+              "name": "type",
+              "value": "car",
+              "confidence": 0.9867105
+            }
+          ],
+          "box": {
+            "l": 0.5828125,
+            "t": 0.5888889,
+            "w": 0.04375,
+            "h": 0.03888889
+          }
+        },
+        "extensions": {},
+        "valueCase": "entity"
+      }
+    ]
+  },
+  "applicationProperties": {
+    "topic": "/subscriptions/86fe5e45-3696-4c0e-b88a-cf350e31ee68/resourceGroups/nicob-lva-sample-resources/providers/microsoft.media/mediaservices/lvasamplek52hdtilb45jm",
+    "subject": "/graphInstances/SampleGraph1/processors/grpcExtension",
+    "eventType": "Microsoft.Media.Graph.Analytics.Inference",
+    "eventTime": "2020-08-27T23:31:49.868Z",
+    "dataVersion": "1.0"
+  }
+}
+```
+
 ### Object detection, tracking and classification
 
 To perform object detection and tracking we can use use [gvadetect](https://github.com/opencv/gst-video-analytics/wiki/gvadetect), [gvatrack](https://github.com/opencv/gst-video-analytics/wiki/gvatrack), and [gvaclassify](https://github.com/opencv/gst-video-analytics/wiki/gvaclassify) together by using the following pipeline
@@ -305,6 +396,62 @@ GST_LVA_PIPELINE=appsrc name=lvasource ! videoconvert ! gvadetect model=/data/mo
 
 2. Redeploy to the Azure IoT Edge Device
 3. Run the topology
+
+#### Inference event output:
+```json
+[IoTHubMonitor] [11:34:48 PM] Message received from [gstreamer/lvaEdge]:
+{
+  "body": {
+    "timestamp": 143871415964891,
+    "inferences": [
+      {
+        "type": "entity",
+        "subtype": "",
+        "inferenceId": "",
+        "relatedInferences": [],
+        "entity": {
+          "tag": {
+            "value": "vehicle",
+            "confidence": 1
+          },
+          "attributes": [
+            {
+              "name": "object_id",
+              "value": "2",
+              "confidence": 0
+            },
+            {
+              "name": "color",
+              "value": "gray",
+              "confidence": 0.90091807
+            },
+            {
+              "name": "type",
+              "value": "car",
+              "confidence": 0.50680137
+            }
+          ],
+          "box": {
+            "l": 0.6875,
+            "t": 0.49722221,
+            "w": 0.0359375,
+            "h": 0.030555556
+          }
+        },
+        "extensions": {},
+        "valueCase": "entity"
+      }
+    ]
+  },
+  "applicationProperties": {
+    "topic": "/subscriptions/86fe5e45-3696-4c0e-b88a-cf350e31ee68/resourceGroups/nicob-lva-sample-resources/providers/microsoft.media/mediaservices/lvasamplek52hdtilb45jm",
+    "subject": "/graphInstances/SampleGraph1/processors/grpcExtension",
+    "eventType": "Microsoft.Media.Graph.Analytics.Inference",
+    "eventTime": "2020-08-27T23:34:48.498Z",
+    "dataVersion": "1.0"
+  }
+}
+```
 
 You can learn more about the options for object tracking on its [wiki page](https://github.com/opencv/gst-video-analytics/wiki/Object-tracking).
 
