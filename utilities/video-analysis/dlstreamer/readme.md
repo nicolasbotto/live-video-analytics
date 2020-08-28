@@ -191,7 +191,7 @@ GST_LVA_PIPELINE=appsrc name=lvasource ! videoconvert ! gvadetect model=/data/mo
 In the above pipeline we are using a model that performs person, vehicle, and bike detection. This model was specified in models.lst file (found in models directory) and was downloaded when you ran the docker build command.
 
 #### Inference event output:
-```json
+```bash
 [IoTHubMonitor] [11:24:53 PM] Message received from [gstreamer/lvaEdge]:
 {
   "body": {
@@ -290,7 +290,7 @@ GST_LVA_PIPELINE=appsrc name=lvasource ! videoconvert ! gvadetect model=/data/mo
 The above pipeline detects person, vehicles, and bikes, and performs classification on detected vehicles.
 
 #### Inference event output:
-```json
+```bash
 [IoTHubMonitor] [11:31:50 PM] Message received from [gstreamer/lvaEdge]:
 {
   "body": {
@@ -398,7 +398,7 @@ GST_LVA_PIPELINE=appsrc name=lvasource ! videoconvert ! gvadetect model=/data/mo
 3. Run the topology
 
 #### Inference event output:
-```json
+```bash
 [IoTHubMonitor] [11:34:48 PM] Message received from [gstreamer/lvaEdge]:
 {
   "body": {
