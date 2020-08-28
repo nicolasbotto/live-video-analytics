@@ -34,7 +34,7 @@ To use the container you just built along with LVA, you can use the deployment m
 
 If you look at the lvaExtension module in the deployment manifest you will see that it exposes ports 80 and 5001 mapped to host ports 8080 and 5001 respectively. There are also two environment variables "MJPEG_OUTPUT" and "GST_LVA_PIPELINE". MJPEG_OUTPUT means that the container will output a MJPEG stream from the GStreamer pipeline and GST_LVA_PIPELINE defines the GStreamer pipeline. Note that the pipeline has an appsrc at the beginning and an appsink at the end. These are the entry and exit points for passing frames into the GStreamer pipeline and getting inferencing results out of the pipeline. The pipeline specified in the above command does not have any video analytics plugins. It simply moves frames from the source to the sink with conversion in the middle to ensure that MJPEG playback can work with RGB frames.
 
-To test the docker container you will need to create a graph topology with gRPC extension or you can use the sample topologogy located in the **topology** folder and then create a graph instance based on that topology. You can do so using LVA on IoT Edge [C#](https://github.com/Azure-Samples/live-video-analytics-iot-edge-csharp) or [Python](https://github.com/Azure-Samples/live-video-analytics-iot-edge-python) sample code. Use the following JSON for operations.json.
+To test the docker container you will need to create a graph topology with gRPC extension or you can use the sample topology located in the **topology** folder and then create a graph instance based on that topology. You can do so using LVA on IoT Edge [C#](https://github.com/Azure-Samples/live-video-analytics-iot-edge-csharp) or [Python](https://github.com/Azure-Samples/live-video-analytics-iot-edge-python) sample code. Use the following JSON for operations.json.
 
 ```JSON
 {
@@ -124,6 +124,8 @@ docker logs lvaExtension -f
 
 You can view the video passing through the GStreamer pipeline by opening a browser on your host machine with URL as [http://127.0.0.1:8080/stream/SampleGraph1](http://127.0.0.1:8080/stream/SampleGraph1).
 
+![Image](./images/mjpeg_stream.png)
+
 ## Using video analytics plugins
 
 Read the [documentation](https://github.com/opencv/gst-video-analytics/wiki/Elements) for DLStreamer GStreamer plugins to understand what plugins are available and how they work.
@@ -135,6 +137,54 @@ To perform object detection we can use [gvadetect](https://github.com/opencv/gst
 ```bash
 GST_LVA_PIPELINE=appsrc name=lvasource ! videoconvert ! gvadetect model=/data/models/intel/person-vehicle-bike-detection-crossroad-0078/FP32/person-vehicle-bike-detection-crossroad-0078.xml model_proc=/data/model_procs/person-vehicle-bike-detection-crossroad-0078.json device=CPU ! videoconvert ! video/x-raw,format=RGB ! videoconvert ! appsink name=lvasink
 ```
+#### Steps:
+1. Open the deployment template file and update the **lvaExtension** module with the new **GST_LVA_PIPELINE** as shown below:
+
+```json
+"lvaExtension" : {
+    "version": "1.0",
+    "type": "docker",
+    "status": "running",
+    "restartPolicy": "always",
+    "settings": {
+    "image": "lvasampleregistry.azurecr.io/lva-gst-ovdl:latest",
+    "createOptions": {
+        "ExposedPorts": {
+            "80/tcp": {},
+            "5001/tcp" : {}
+        },
+        "Env":[
+        "MJPEG_OUTPUT=1",
+        "GST_LVA_PIPELINE=appsrc name=lvasource ! videoconvert ! gvadetect model=/data/models/intel/person-vehicle-bike-detection-crossroad-0078/FP32/person-vehicle-bike-detection-crossroad-0078.xml model_proc=/data/model_procs/person-vehicle-bike-detection-crossroad-0078.json device=CPU ! videoconvert ! video/x-raw,format=RGB ! videoconvert ! appsink name=lvasink"
+        ],                
+        "HostConfig": {
+            "PortBindings": {
+                "80/tcp": [
+                    {
+                        "HostPort": "8080"
+                    }
+                ],
+                "5001/tcp" : [
+                    {
+                        "HostPort" : "5001"
+                    }
+                ]
+            },
+            "LogConfig": {
+                "Type": "",
+                "Config": {
+                "max-size": "10m",
+                "max-file": "10"
+                }
+            },        
+            "IpcMode": "container:lvaEdge"
+        }
+    }
+}
+```
+
+2. Redeploy to the Azure IoT Edge Device
+3. Run the topology
 
 In the above pipeline we are using a model that performs person, vehicle, and bike detection. This model was specified in models.lst file (found in models directory) and was downloaded when you ran the docker build command.
 
@@ -148,6 +198,55 @@ To perform object detection and classification we can use use [gvadetect](https:
 GST_LVA_PIPELINE=appsrc name=lvasource ! videoconvert ! gvadetect model=/data/models/intel/person-vehicle-bike-detection-crossroad-0078/FP32/person-vehicle-bike-detection-crossroad-0078.xml model_proc=/data/model_procs/person-vehicle-bike-detection-crossroad-0078.json device=CPU ! gvaclassify model=/data/models/intel/vehicle-attributes-recognition-barrier-0039/FP32/vehicle-attributes-recognition-barrier-0039.xml model-proc=/data/model_procs/vehicle-attributes-recognition-barrier-0039.json device=CPU object-class=vehicle ! videoconvert ! video/x-raw,format=RGB ! videoconvert ! appsink name=lvasink
 ```
 
+#### Steps:
+1. Open the deployment template file and update the **lvaExtension** module with the new **GST_LVA_PIPELINE** as shown below:
+
+```json
+"lvaExtension" : {
+    "version": "1.0",
+    "type": "docker",
+    "status": "running",
+    "restartPolicy": "always",
+    "settings": {
+    "image": "lvasampleregistry.azurecr.io/lva-gst-ovdl:latest",
+    "createOptions": {
+        "ExposedPorts": {
+            "80/tcp": {},
+            "5001/tcp" : {}
+        },
+        "Env":[
+        "MJPEG_OUTPUT=1",
+        "GST_LVA_PIPELINE=appsrc name=lvasource ! videoconvert ! gvadetect model=/data/models/intel/person-vehicle-bike-detection-crossroad-0078/FP32/person-vehicle-bike-detection-crossroad-0078.xml model_proc=/data/model_procs/person-vehicle-bike-detection-crossroad-0078.json device=CPU ! gvaclassify model=/data/models/intel/vehicle-attributes-recognition-barrier-0039/FP32/vehicle-attributes-recognition-barrier-0039.xml model-proc=/data/model_procs/vehicle-attributes-recognition-barrier-0039.json device=CPU object-class=vehicle ! videoconvert ! video/x-raw,format=RGB ! videoconvert ! appsink name=lvasink"
+        ],                
+        "HostConfig": {
+            "PortBindings": {
+                "80/tcp": [
+                    {
+                        "HostPort": "8080"
+                    }
+                ],
+                "5001/tcp" : [
+                    {
+                        "HostPort" : "5001"
+                    }
+                ]
+            },
+            "LogConfig": {
+                "Type": "",
+                "Config": {
+                "max-size": "10m",
+                "max-file": "10"
+                }
+            },        
+            "IpcMode": "container:lvaEdge"
+        }
+    }
+}
+```
+
+2. Redeploy to the Azure IoT Edge Device
+3. Run the topology
+
 The above pipeline detects person, vehicles, and bikes, and performs classification on detected vehicles.
 
 ### Object detection, tracking and classification
@@ -157,6 +256,55 @@ To perform object detection and tracking we can use use [gvadetect](https://gith
 ```bash
 GST_LVA_PIPELINE=appsrc name=lvasource ! videoconvert ! gvadetect model=/data/models/intel/person-vehicle-bike-detection-crossroad-0078/FP32/person-vehicle-bike-detection-crossroad-0078.xml model_proc=/data/model_procs/person-vehicle-bike-detection-crossroad-0078.json device=CPU inference-interval=3 ! queue ! gvatrack tracking-type=short-term ! queue ! gvaclassify model=/data/models/intel/vehicle-attributes-recognition-barrier-0039/FP32/vehicle-attributes-recognition-barrier-0039.xml model-proc=/data/model_procs/vehicle-attributes-recognition-barrier-0039.json device=CPU object-class=vehicle ! videoconvert ! video/x-raw,format=RGB ! videoconvert ! appsink name=lvasink
 ```
+
+#### Steps:
+1. Open the deployment template file and update the **lvaExtension** module with the new **GST_LVA_PIPELINE** as shown below:
+
+```json
+"lvaExtension" : {
+    "version": "1.0",
+    "type": "docker",
+    "status": "running",
+    "restartPolicy": "always",
+    "settings": {
+    "image": "lvasampleregistry.azurecr.io/lva-gst-ovdl:latest",
+    "createOptions": {
+        "ExposedPorts": {
+            "80/tcp": {},
+            "5001/tcp" : {}
+        },
+        "Env":[
+        "MJPEG_OUTPUT=1",
+        "GST_LVA_PIPELINE=appsrc name=lvasource ! videoconvert ! gvadetect model=/data/models/intel/person-vehicle-bike-detection-crossroad-0078/FP32/person-vehicle-bike-detection-crossroad-0078.xml model_proc=/data/model_procs/person-vehicle-bike-detection-crossroad-0078.json device=CPU ! gvaclassify model=/data/models/intel/vehicle-attributes-recognition-barrier-0039/FP32/vehicle-attributes-recognition-barrier-0039.xml model-proc=/data/model_procs/vehicle-attributes-recognition-barrier-0039.json device=CPU object-class=vehicle ! videoconvert ! video/x-raw,format=RGB ! videoconvert ! appsink name=lvasink"
+        ],                
+        "HostConfig": {
+            "PortBindings": {
+                "80/tcp": [
+                    {
+                        "HostPort": "8080"
+                    }
+                ],
+                "5001/tcp" : [
+                    {
+                        "HostPort" : "5001"
+                    }
+                ]
+            },
+            "LogConfig": {
+                "Type": "",
+                "Config": {
+                "max-size": "10m",
+                "max-file": "10"
+                }
+            },        
+            "IpcMode": "container:lvaEdge"
+        }
+    }
+}
+```
+
+2. Redeploy to the Azure IoT Edge Device
+3. Run the topology
 
 You can learn more about the options for object tracking on its [wiki page](https://github.com/opencv/gst-video-analytics/wiki/Object-tracking).
 
