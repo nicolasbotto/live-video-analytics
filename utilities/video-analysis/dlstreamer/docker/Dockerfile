@@ -1,4 +1,4 @@
-FROM openvino/ubuntu18_runtime:2020.4 
+FROM nvcr.io/nvidia/deepstream:5.0-20.07-devel
 
 USER root
 
@@ -10,7 +10,10 @@ COPY ./app/gst-lva-extension/*.* /app/
 
 # Install gstreamer-1.0-dev
 RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends libgstreamer1.0-dev 
+    apt-get -y install cmake && \
+    apt-get install -y --no-install-recommends build-essential && \
+    apt-get install -y --no-install-recommends libgstreamer1.0-dev && \
+    apt-get install -y python3-pip
 
 # Build LVA GST library
 RUN mkdir -p /app/build && \
@@ -18,29 +21,9 @@ RUN mkdir -p /app/build && \
     cmake .. && \
     make
 
-# Install Git and clone OMZ (OpenVINO Model Zoo)
-RUN apt-get update -y && \ 
-    apt-get install -y --no-install-recommends git && \
-    git clone https://github.com/openvinotoolkit/open_model_zoo $INTEL_OPENVINO_DIR/omz && \
-    apt-get clean && \
-    apt-get purge -y --auto-remove git
-
-# Copy model list file
-RUN mkdir -p /data/models
-COPY ./models/models.lst /data/models
-
 # Install required python packages 
 RUN pip3 install requests pyyaml protobuf grpcio && \
     apt-get clean
-
-# Download models
-RUN cd $INTEL_OPENVINO_DIR/omz/tools/downloader && \
-    python3 downloader.py --list /data/models/models.lst -o /data/models
-
-# Copy model proc files
-# There may be more at https://github.com/opencv/gst-video-analytics/tree/master/samples/model_proc
-RUN mkdir -p /data/model_procs
-COPY ./models/model_proc/*.json /data/model_procs/
 
 # Install additional python packages
 RUN pip3 install numpy flask pillow gunicorn && \
@@ -74,9 +57,12 @@ RUN mkdir /var/runit && \
 EXPOSE 80
 EXPOSE 5001
 
-# Run startup script that initialized OpenVINO environment variables and starts the LVA gRPC extension server
+# Starts the LVA gRPC extension server
 WORKDIR /app
-COPY ./app/start.sh /app
-RUN chmod +x /app/start.sh
-CMD exec /app/start.sh
-
+# COPY ./app/start.sh /app
+# RUN chmod +x /app/start.sh
+# CMD exec /app/start.sh
+RUN pip3 install ptvsd
+#debugger port
+EXPOSE 5678 
+CMD python3 -m ptvsd --host 0.0.0.0 --port 5678 --wait --multiprocess main.py -p 5001

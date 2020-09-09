@@ -1,4 +1,4 @@
 #!/bin/bash
 runsvdir /var/runit &
-source $INTEL_OPENVINO_DIR/bin/setupvars.sh
+export GST_DEBUG=4
 python3 main.py -p 5001
