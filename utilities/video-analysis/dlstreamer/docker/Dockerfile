@@ -59,10 +59,10 @@ EXPOSE 5001
 
 # Starts the LVA gRPC extension server
 WORKDIR /app
-# COPY ./app/start.sh /app
-# RUN chmod +x /app/start.sh
-# CMD exec /app/start.sh
-RUN pip3 install ptvsd
+COPY ./app/start.sh /app
+RUN chmod +x /app/start.sh
+CMD exec /app/start.sh
+# RUN pip3 install ptvsd
 #debugger port
-EXPOSE 5678 
-CMD python3 -m ptvsd --host 0.0.0.0 --port 5678 --wait --multiprocess main.py -p 5001
+# EXPOSE 5678 
+# CMD python3 -m ptvsd --host 0.0.0.0 --port 5678 --wait --multiprocess main.py -p 5001
