@@ -186,7 +186,7 @@ class InferenceServer(extension_pb2_grpc.MediaGraphExtensionServicer):
                 requestSeqNum = mediaStreamMessageRequest.sequence_number
 
                            
-                logging.info('[Received] SeqNum: {0:07d}'.format(requestSeqNum))
+                logging.info('[Received] SequenceNum: {0:07d}'.format(requestSeqNum))
 
                 # Get media content bytes. (bytes sent over shared memory buffer, segment or inline to message)                
                 if (not self.ProcessMediaSample(clientState, mediaStreamMessageRequest, gst_lva_pipeline)):
@@ -219,4 +219,4 @@ class InferenceServer(extension_pb2_grpc.MediaGraphExtensionServicer):
                 PrintGetExceptionDetails()
 
         logging.info('Done processing messages')
-        logging.info('MediaStreamDescriptor:\n{0}'.format(clientState._mediaStreamDescriptor))        
+        logging.info('MediaStreamDescriptor:\n{0}'.format(clientState._mediaStreamDescriptor))
