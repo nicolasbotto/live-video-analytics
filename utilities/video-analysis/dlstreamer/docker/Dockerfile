@@ -7,6 +7,7 @@ RUN mkdir /app
 COPY ./app/*.py /app/
 COPY ./app/grpc-autogen/*.py /app/
 COPY ./app/gst-lva-extension/*.* /app/
+COPY ./app/config/*.txt /app/
 
 # Install gstreamer-1.0-dev
 RUN apt-get update -y && \

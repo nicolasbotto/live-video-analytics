@@ -135,25 +135,8 @@ class Gst_Lva_Pipeline:
 					left=int(rect_params.left)
 					width=int(rect_params.width)
 					height=int(rect_params.height)
-					confidence = obj_meta.confidence
+					obj_confidence = obj_meta.confidence
 					objLabel = obj_meta.obj_label
-
-					# topScaled=int(rect_params.top * frameHeight)
-					# leftScaled=int(rect_params.left * frameWidth)
-					# widthScaled=int(rect_params.width * frameWidth)
-					# heightScaled=int(rect_params.height * frameHeight)
-					# print("frame_object Scaled: top:{}, left:{}, width:{}, height:{}".format(topScaled, leftScaled, widthScaled, heightScaled))
-
-					# bbox = obj_meta.detector_bbox_info
-
-					# if bbox is not None:
-					# 	# topB=int(bbox.top)
-					# 	# leftB=int(bbox.left)
-					# 	# widthB=int(bbox.width)
-					# 	# heightB=int(bbox.height)
-					# 	# print("bbox: top:{}, left:{}, width:{}, height:{}".format(topB, leftB, widthB, heightB))
-					# 	print("bbox: {}".format(bbox))
-					obj_confidence = confidence					
 					obj_label = objLabel
 
 					obj_left = left / iw
