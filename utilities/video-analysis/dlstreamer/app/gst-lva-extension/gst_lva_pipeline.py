@@ -19,10 +19,8 @@ gi.require_version('GstVideo', '1.0')
 from gi.repository import GObject, Gst, GstVideo
 
 from gst_lva_message import add_message, remove_message, get_message
-from gst_video_roi import RegionOfInterest, VideoRegionOfInterestMeta
-
 from exception_handler import PrintGetExceptionDetails
-
+import pyds
 import inferencing_pb2
 import media_pb2
 import extension_pb2
@@ -89,7 +87,7 @@ class Gst_Lva_Pipeline:
 		self._sink.set_property("emit-signals", True)
 		self._sink.set_property("max-buffers", 1)		
 
-		self._sink.connect("new-sample", self.on_new_sample)		
+		self._sink.connect("new-sample", self.on_new_sample)
 
 	def get_lva_MediaStreamMessage(self, buffer, gst_lva_message, ih, iw):
 
@@ -97,10 +95,23 @@ class Gst_Lva_Pipeline:
 		msg.ack_sequence_number = gst_lva_message.sequence_number
 		msg.media_sample.timestamp = gst_lva_message.timestamp
 			
-		regions = RegionOfInterest._iterate(buffer)
+		# # Retrieve batch metadata from the gst_buffer
+		# # Note that pyds.gst_buffer_get_nvds_batch_meta() expects the
+		# # C address of gst_buffer as input, which is obtained with hash(gst_buffer)
+		batch_meta = pyds.gst_buffer_get_nvds_batch_meta(hash(buffer))
+		frame = batch_meta.frame_meta_list
+		while frame is not None:
+			try:
+				# Note that frame.data needs a cast to pyds.NvDsFrameMeta
+				# The casting is done by pyds.NvDsFrameMeta.cast()
+				# The casting also keeps ownership of the underlying memory
+				# in the C code, so the Python garbage collector will leave
+				# it alone.
+				frame_meta = pyds.NvDsFrameMeta.cast(frame.data)
+				objInference = frame_meta.obj_meta_list
+				frameWidth = frame_meta.source_frame_width
+				frameHeight = frame_meta.source_frame_height
 
-		if regions is not None:
-			for roi in regions:
 				inference = msg.media_sample.inferences.add()	
 
 				attributes = []
@@ -109,29 +120,52 @@ class Gst_Lva_Pipeline:
 				obj_left = 0
 				obj_width = 0
 				obj_top = 0
-				obj_width = 0				
+				obj_width = 0	
 
-				for data_struct in roi.data_structs():
-					name = roi._getname(data_struct)						
+				# iterate through objects 
+				while objInference is not None:
+					try: 
+						# Casting objInference.data to pyds.NvDsObjectMeta
+						obj_meta=pyds.NvDsObjectMeta.cast(objInference.data)
+					except StopIteration:
+						break
+					
+					rect_params=obj_meta.rect_params
+					top=int(rect_params.top)
+					left=int(rect_params.left)
+					width=int(rect_params.width)
+					height=int(rect_params.height)
+					confidence = obj_meta.confidence
+					objLabel = obj_meta.obj_label
 
-					if (name == 'detection'):
-						obj_confidence = roi._getitem(data_struct, 'confidence')						
-						obj_label = roi.label()
+					# topScaled=int(rect_params.top * frameHeight)
+					# leftScaled=int(rect_params.left * frameWidth)
+					# widthScaled=int(rect_params.width * frameWidth)
+					# heightScaled=int(rect_params.height * frameHeight)
+					# print("frame_object Scaled: top:{}, left:{}, width:{}, height:{}".format(topScaled, leftScaled, widthScaled, heightScaled))
 
-						obj_left = roi.roimeta.x / iw
-						obj_top = roi.roimeta.y / ih
-						obj_width = roi.roimeta.w / iw
-						obj_height = roi.roimeta.h / ih
+					# bbox = obj_meta.detector_bbox_info
 
-						inference.type = inferencing_pb2.Inference.InferenceType.ENTITY
-					elif (name == 'object_id'):
-						obj_id = roi._getitem(data_struct, 'id')
-						attributes.append([name, str(obj_id), 0])
-					else:
-						attr_name = name
-						attr_label = roi._getitem(data_struct, 'label')
-						attr_confidence = roi._getitem(data_struct, 'confidence')
-						attributes.append([attr_name, attr_label, attr_confidence])
+					# if bbox is not None:
+					# 	# topB=int(bbox.top)
+					# 	# leftB=int(bbox.left)
+					# 	# widthB=int(bbox.width)
+					# 	# heightB=int(bbox.height)
+					# 	# print("bbox: top:{}, left:{}, width:{}, height:{}".format(topB, leftB, widthB, heightB))
+					# 	print("bbox: {}".format(bbox))
+					obj_confidence = confidence					
+					obj_label = objLabel
+
+					obj_left = left / iw
+					obj_top = top / ih
+					obj_width = width/ iw
+					obj_height = height / ih
+
+					inference.type = inferencing_pb2.Inference.InferenceType.ENTITY
+					try: 
+						objInference=objInference.next
+					except StopIteration:
+						break
 
 				if obj_label is not None:
 					try:
@@ -160,7 +194,14 @@ class Gst_Lva_Pipeline:
 						PrintGetExceptionDetails()
 									
 					inference.entity.CopyFrom(entity)
-			
+			except StopIteration:
+				break
+
+			try:
+				frame = frame.next
+			except StopIteration:
+				break
+
 		return msg		
 
 	def pushImageWithInference(self, sample, inferences):
@@ -194,9 +235,8 @@ class Gst_Lva_Pipeline:
 				x2 = (x2 * w) + x1
 				y2 = (y2 * h) + y1
 				objClass = inference.entity.tag.value        
-
 				draw.rectangle((x1, y1, x2, y2), outline = 'blue', width = 1)				
-				draw.text((x1, y1), str(objClass), fill = "white", font = textfont)
+				draw.text((x1, y1-10), str(objClass), fill = "white", font = textfont)
 
 			imgBuf = io.BytesIO()
 			im.save(imgBuf, format='JPEG')
@@ -285,5 +325,3 @@ class Gst_Lva_Pipeline:
 			logging.info('Cannot push buffer forward and hence dropping frame with seq_num ' + str(seq_num))
 
 		return retVal
-
-
