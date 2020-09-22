@@ -148,7 +148,7 @@ def load_image(request: Request):
     try:
         image_data = io.BytesIO(request.get_data())
         image = Image.open(image_data)
-    except Exception as Err:
+    except Exception:
         abort(Response(response='Could not decode image', status=400))
 
     # If size is not 416x416 then resize
