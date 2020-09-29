@@ -15,128 +15,148 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='media.proto',
-  package='microsoft.azure.media.graph.extensions.grpc',
+  package='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1',
   syntax='proto3',
-  serialized_options=b'\252\002+Microsoft.Azure.Media.Graph.Extensions.Grpc',
-  serialized_pb=b'\n\x0bmedia.proto\x12+microsoft.azure.media.graph.extensions.grpc\"\xa5\x01\n\x0fMediaDescriptor\x12\x11\n\ttimescale\x18\x01 \x01(\r\x12h\n\x19video_frame_sample_format\x18\x05 \x01(\x0b\x32\x43.microsoft.azure.media.graph.extensions.grpc.VideoFrameSampleFormatH\x00\x42\x15\n\x13media_sample_format\"\x89\x04\n\x16VideoFrameSampleFormat\x12^\n\x08\x65ncoding\x18\x01 \x01(\x0e\x32L.microsoft.azure.media.graph.extensions.grpc.VideoFrameSampleFormat.Encoding\x12\x65\n\x0cpixel_format\x18\x02 \x01(\x0e\x32O.microsoft.azure.media.graph.extensions.grpc.VideoFrameSampleFormat.PixelFormat\x12K\n\ndimensions\x18\x03 \x01(\x0b\x32\x37.microsoft.azure.media.graph.extensions.grpc.Dimensions\x12\x0e\n\x06stride\x18\x04 \x01(\r\".\n\x08\x45ncoding\x12\x07\n\x03\x42MP\x10\x00\x12\x07\n\x03JPG\x10\x01\x12\x07\n\x03PNG\x10\x02\x12\x07\n\x03RAW\x10\x03\"\x9a\x01\n\x0bPixelFormat\x12\x08\n\x04NONE\x10\x00\x12\x0b\n\x07YUV420P\x10\x14\x12\x0c\n\x08RGB565BE\x10(\x12\x0c\n\x08RGB565LE\x10)\x12\x0c\n\x08RGB555BE\x10*\x12\x0c\n\x08RGB555LE\x10+\x12\t\n\x05RGB24\x10<\x12\t\n\x05\x42GR24\x10=\x12\x08\n\x04\x41RGB\x10P\x12\x08\n\x04RGBA\x10Q\x12\x08\n\x04\x41\x42GR\x10R\x12\x08\n\x04\x42GRA\x10S\"+\n\nDimensions\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\"\x1d\n\x0c\x43ontentBytes\x12\r\n\x05\x62ytes\x18\x01 \x01(\x0c\"@\n\x10\x43ontentReference\x12\x16\n\x0e\x61\x64\x64ress_offset\x18\x01 \x01(\x04\x12\x14\n\x0clength_bytes\x18\x02 \x01(\x04\"$\n\rContentHandle\x12\x13\n\x0bhandle_name\x18\x01 \x01(\tB.\xaa\x02+Microsoft.Azure.Media.Graph.Extensions.Grpcb\x06proto3'
+  serialized_options=None,
+  create_key=_descriptor._internal_create_key,
+  serialized_pb=b'\n\x0bmedia.proto\x12@microsoft.azure.media.live_video_analytics.extensibility.grpc.v1\"\xba\x01\n\x0fMediaDescriptor\x12\x11\n\ttimescale\x18\x01 \x01(\r\x12}\n\x19video_frame_sample_format\x18\x05 \x01(\x0b\x32X.microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.VideoFrameSampleFormatH\x00\x42\x15\n\x13media_sample_format\"\xce\x04\n\x16VideoFrameSampleFormat\x12s\n\x08\x65ncoding\x18\x01 \x01(\x0e\x32\x61.microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.VideoFrameSampleFormat.Encoding\x12z\n\x0cpixel_format\x18\x02 \x01(\x0e\x32\x64.microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.VideoFrameSampleFormat.PixelFormat\x12`\n\ndimensions\x18\x03 \x01(\x0b\x32L.microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.Dimensions\x12\x14\n\x0cstride_bytes\x18\x04 \x01(\r\".\n\x08\x45ncoding\x12\x07\n\x03\x42MP\x10\x00\x12\x07\n\x03JPG\x10\x01\x12\x07\n\x03PNG\x10\x02\x12\x07\n\x03RAW\x10\x03\"\x9a\x01\n\x0bPixelFormat\x12\x08\n\x04NONE\x10\x00\x12\x0b\n\x07YUV420P\x10\x14\x12\x0c\n\x08RGB565BE\x10(\x12\x0c\n\x08RGB565LE\x10)\x12\x0c\n\x08RGB555BE\x10*\x12\x0c\n\x08RGB555LE\x10+\x12\t\n\x05RGB24\x10<\x12\t\n\x05\x42GR24\x10=\x12\x08\n\x04\x41RGB\x10P\x12\x08\n\x04RGBA\x10Q\x12\x08\n\x04\x41\x42GR\x10R\x12\x08\n\x04\x42GRA\x10S\"+\n\nDimensions\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\"\x1d\n\x0c\x43ontentBytes\x12\r\n\x05\x62ytes\x18\x01 \x01(\x0c\"@\n\x10\x43ontentReference\x12\x16\n\x0e\x61\x64\x64ress_offset\x18\x01 \x01(\x04\x12\x14\n\x0clength_bytes\x18\x02 \x01(\x04\x62\x06proto3'
 )
 
 
 
 _VIDEOFRAMESAMPLEFORMAT_ENCODING = _descriptor.EnumDescriptor(
   name='Encoding',
-  full_name='microsoft.azure.media.graph.extensions.grpc.VideoFrameSampleFormat.Encoding',
+  full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.VideoFrameSampleFormat.Encoding',
   filename=None,
   file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
   values=[
     _descriptor.EnumValueDescriptor(
       name='BMP', index=0, number=0,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='JPG', index=1, number=1,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='PNG', index=2, number=2,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='RAW', index=3, number=3,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=547,
-  serialized_end=593,
+  serialized_start=658,
+  serialized_end=704,
 )
 _sym_db.RegisterEnumDescriptor(_VIDEOFRAMESAMPLEFORMAT_ENCODING)
 
 _VIDEOFRAMESAMPLEFORMAT_PIXELFORMAT = _descriptor.EnumDescriptor(
   name='PixelFormat',
-  full_name='microsoft.azure.media.graph.extensions.grpc.VideoFrameSampleFormat.PixelFormat',
+  full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.VideoFrameSampleFormat.PixelFormat',
   filename=None,
   file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
   values=[
     _descriptor.EnumValueDescriptor(
       name='NONE', index=0, number=0,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='YUV420P', index=1, number=20,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='RGB565BE', index=2, number=40,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='RGB565LE', index=3, number=41,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='RGB555BE', index=4, number=42,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='RGB555LE', index=5, number=43,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='RGB24', index=6, number=60,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='BGR24', index=7, number=61,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='ARGB', index=8, number=80,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='RGBA', index=9, number=81,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='ABGR', index=10, number=82,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
       name='BGRA', index=11, number=83,
       serialized_options=None,
-      type=None),
+      type=None,
+      create_key=_descriptor._internal_create_key),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=596,
-  serialized_end=750,
+  serialized_start=707,
+  serialized_end=861,
 )
 _sym_db.RegisterEnumDescriptor(_VIDEOFRAMESAMPLEFORMAT_PIXELFORMAT)
 
 
 _MEDIADESCRIPTOR = _descriptor.Descriptor(
   name='MediaDescriptor',
-  full_name='microsoft.azure.media.graph.extensions.grpc.MediaDescriptor',
+  full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.MediaDescriptor',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
+  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='timescale', full_name='microsoft.azure.media.graph.extensions.grpc.MediaDescriptor.timescale', index=0,
+      name='timescale', full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.MediaDescriptor.timescale', index=0,
       number=1, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='video_frame_sample_format', full_name='microsoft.azure.media.graph.extensions.grpc.MediaDescriptor.video_frame_sample_format', index=1,
+      name='video_frame_sample_format', full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.MediaDescriptor.video_frame_sample_format', index=1,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -149,49 +169,52 @@ _MEDIADESCRIPTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
     _descriptor.OneofDescriptor(
-      name='media_sample_format', full_name='microsoft.azure.media.graph.extensions.grpc.MediaDescriptor.media_sample_format',
-      index=0, containing_type=None, fields=[]),
+      name='media_sample_format', full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.MediaDescriptor.media_sample_format',
+      index=0, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
   ],
-  serialized_start=61,
-  serialized_end=226,
+  serialized_start=82,
+  serialized_end=268,
 )
 
 
 _VIDEOFRAMESAMPLEFORMAT = _descriptor.Descriptor(
   name='VideoFrameSampleFormat',
-  full_name='microsoft.azure.media.graph.extensions.grpc.VideoFrameSampleFormat',
+  full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.VideoFrameSampleFormat',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
+  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='encoding', full_name='microsoft.azure.media.graph.extensions.grpc.VideoFrameSampleFormat.encoding', index=0,
+      name='encoding', full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.VideoFrameSampleFormat.encoding', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='pixel_format', full_name='microsoft.azure.media.graph.extensions.grpc.VideoFrameSampleFormat.pixel_format', index=1,
+      name='pixel_format', full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.VideoFrameSampleFormat.pixel_format', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='dimensions', full_name='microsoft.azure.media.graph.extensions.grpc.VideoFrameSampleFormat.dimensions', index=2,
+      name='dimensions', full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.VideoFrameSampleFormat.dimensions', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='stride', full_name='microsoft.azure.media.graph.extensions.grpc.VideoFrameSampleFormat.stride', index=3,
+      name='stride_bytes', full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.VideoFrameSampleFormat.stride_bytes', index=3,
       number=4, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -206,32 +229,33 @@ _VIDEOFRAMESAMPLEFORMAT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=229,
-  serialized_end=750,
+  serialized_start=271,
+  serialized_end=861,
 )
 
 
 _DIMENSIONS = _descriptor.Descriptor(
   name='Dimensions',
-  full_name='microsoft.azure.media.graph.extensions.grpc.Dimensions',
+  full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.Dimensions',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
+  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='width', full_name='microsoft.azure.media.graph.extensions.grpc.Dimensions.width', index=0,
+      name='width', full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.Dimensions.width', index=0,
       number=1, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='height', full_name='microsoft.azure.media.graph.extensions.grpc.Dimensions.height', index=1,
+      name='height', full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.Dimensions.height', index=1,
       number=2, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -244,25 +268,26 @@ _DIMENSIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=752,
-  serialized_end=795,
+  serialized_start=863,
+  serialized_end=906,
 )
 
 
 _CONTENTBYTES = _descriptor.Descriptor(
   name='ContentBytes',
-  full_name='microsoft.azure.media.graph.extensions.grpc.ContentBytes',
+  full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.ContentBytes',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
+  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='bytes', full_name='microsoft.azure.media.graph.extensions.grpc.ContentBytes.bytes', index=0,
+      name='bytes', full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.ContentBytes.bytes', index=0,
       number=1, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=b"",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -275,32 +300,33 @@ _CONTENTBYTES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=797,
-  serialized_end=826,
+  serialized_start=908,
+  serialized_end=937,
 )
 
 
 _CONTENTREFERENCE = _descriptor.Descriptor(
   name='ContentReference',
-  full_name='microsoft.azure.media.graph.extensions.grpc.ContentReference',
+  full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.ContentReference',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
+  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='address_offset', full_name='microsoft.azure.media.graph.extensions.grpc.ContentReference.address_offset', index=0,
+      name='address_offset', full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.ContentReference.address_offset', index=0,
       number=1, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='length_bytes', full_name='microsoft.azure.media.graph.extensions.grpc.ContentReference.length_bytes', index=1,
+      name='length_bytes', full_name='microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.ContentReference.length_bytes', index=1,
       number=2, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -313,39 +339,8 @@ _CONTENTREFERENCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=828,
-  serialized_end=892,
-)
-
-
-_CONTENTHANDLE = _descriptor.Descriptor(
-  name='ContentHandle',
-  full_name='microsoft.azure.media.graph.extensions.grpc.ContentHandle',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='handle_name', full_name='microsoft.azure.media.graph.extensions.grpc.ContentHandle.handle_name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=894,
-  serialized_end=930,
+  serialized_start=939,
+  serialized_end=1003,
 )
 
 _MEDIADESCRIPTOR.fields_by_name['video_frame_sample_format'].message_type = _VIDEOFRAMESAMPLEFORMAT
@@ -362,51 +357,42 @@ DESCRIPTOR.message_types_by_name['VideoFrameSampleFormat'] = _VIDEOFRAMESAMPLEFO
 DESCRIPTOR.message_types_by_name['Dimensions'] = _DIMENSIONS
 DESCRIPTOR.message_types_by_name['ContentBytes'] = _CONTENTBYTES
 DESCRIPTOR.message_types_by_name['ContentReference'] = _CONTENTREFERENCE
-DESCRIPTOR.message_types_by_name['ContentHandle'] = _CONTENTHANDLE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 MediaDescriptor = _reflection.GeneratedProtocolMessageType('MediaDescriptor', (_message.Message,), {
   'DESCRIPTOR' : _MEDIADESCRIPTOR,
   '__module__' : 'media_pb2'
-  # @@protoc_insertion_point(class_scope:microsoft.azure.media.graph.extensions.grpc.MediaDescriptor)
+  # @@protoc_insertion_point(class_scope:microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.MediaDescriptor)
   })
 _sym_db.RegisterMessage(MediaDescriptor)
 
 VideoFrameSampleFormat = _reflection.GeneratedProtocolMessageType('VideoFrameSampleFormat', (_message.Message,), {
   'DESCRIPTOR' : _VIDEOFRAMESAMPLEFORMAT,
   '__module__' : 'media_pb2'
-  # @@protoc_insertion_point(class_scope:microsoft.azure.media.graph.extensions.grpc.VideoFrameSampleFormat)
+  # @@protoc_insertion_point(class_scope:microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.VideoFrameSampleFormat)
   })
 _sym_db.RegisterMessage(VideoFrameSampleFormat)
 
 Dimensions = _reflection.GeneratedProtocolMessageType('Dimensions', (_message.Message,), {
   'DESCRIPTOR' : _DIMENSIONS,
   '__module__' : 'media_pb2'
-  # @@protoc_insertion_point(class_scope:microsoft.azure.media.graph.extensions.grpc.Dimensions)
+  # @@protoc_insertion_point(class_scope:microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.Dimensions)
   })
 _sym_db.RegisterMessage(Dimensions)
 
 ContentBytes = _reflection.GeneratedProtocolMessageType('ContentBytes', (_message.Message,), {
   'DESCRIPTOR' : _CONTENTBYTES,
   '__module__' : 'media_pb2'
-  # @@protoc_insertion_point(class_scope:microsoft.azure.media.graph.extensions.grpc.ContentBytes)
+  # @@protoc_insertion_point(class_scope:microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.ContentBytes)
   })
 _sym_db.RegisterMessage(ContentBytes)
 
 ContentReference = _reflection.GeneratedProtocolMessageType('ContentReference', (_message.Message,), {
   'DESCRIPTOR' : _CONTENTREFERENCE,
   '__module__' : 'media_pb2'
-  # @@protoc_insertion_point(class_scope:microsoft.azure.media.graph.extensions.grpc.ContentReference)
+  # @@protoc_insertion_point(class_scope:microsoft.azure.media.live_video_analytics.extensibility.grpc.v1.ContentReference)
   })
 _sym_db.RegisterMessage(ContentReference)
 
-ContentHandle = _reflection.GeneratedProtocolMessageType('ContentHandle', (_message.Message,), {
-  'DESCRIPTOR' : _CONTENTHANDLE,
-  '__module__' : 'media_pb2'
-  # @@protoc_insertion_point(class_scope:microsoft.azure.media.graph.extensions.grpc.ContentHandle)
-  })
-_sym_db.RegisterMessage(ContentHandle)
 
-
-DESCRIPTOR._options = None
 # @@protoc_insertion_point(module_scope)
