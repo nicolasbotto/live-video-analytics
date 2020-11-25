@@ -71,7 +71,7 @@ To test the docker container you will need to create a graph topology with gRPC 
         {
             "opName": "GraphTopologySet",
             "opParams": {
-                "topologyFile": "grpc-extension.json"
+                "topologyFile": "deepstream.json"
             }
         },
         {
@@ -93,10 +93,6 @@ To test the docker container you will need to create a graph topology with gRPC 
                         {
                             "name": "rtspPassword",
                             "value": "testpassword"
-                        },
-                        {
-                            "name" : "fps",
-                            "value": 10
                         },
                         {
                             "name" : "grpcExtensionAddress",
@@ -168,10 +164,10 @@ To view the results, follow the steps outlined in the previous section to view t
 
 ### Object detection
 
-To perform object detection we can use [nvinfer](https://docs.nvidia.com/metropolis/deepstream/dev-guide/index.html#page/DeepStream%20Plugins%20Development%20Guide/deepstream_plugin_details.3.01.html#wwpID0E0OFB0HA) plugin. For that, use the GST_CONFIG_FILE environment variable to specify which configuration file the **nvinfer** plugin will use. In our example, the GST_CONFIG_FILE points to the sample.txt file, you can find it located under the **config** folder.
+To perform object detection we can use [nvinfer](https://docs.nvidia.com/metropolis/deepstream/dev-guide/text/DS_plugin_gst-nvinfer.html?highlight=nvinfer) plugin. For that, use the GST_CONFIG_FILE environment variable to specify which configuration file the **nvinfer** plugin will use. In our example, the GST_CONFIG_FILE points to the inference.txt file, you can find it located under the **config** folder.
 
 ```bash
-GST_CONFIG_FILE=sample.txt
+GST_CONFIG_FILE=inference.txt
 ```
 
 #### Steps:
@@ -191,8 +187,8 @@ GST_CONFIG_FILE=sample.txt
             "5001/tcp" : {}
         },
         "Env":[
-          "MJPEG_OUTPUT=1",
-          "GST_CONFIG_FILE=sample.txt"
+            "MJPEG_OUTPUT=1",
+            "GST_CONFIG_FILE=inference.txt"
         ],                
         "HostConfig": {
             "PortBindings": {
@@ -214,7 +210,7 @@ GST_CONFIG_FILE=sample.txt
                   "max-file": "10"
                 }
             },        
-            "IpcMode": "container:lvaEdge",
+            "IpcMode": "host",
             "Runtime": "nvidia"
         }
       }
@@ -225,4 +221,330 @@ GST_CONFIG_FILE=sample.txt
 2. Redeploy to the Azure IoT Edge Device
 3. Run the topology
 
-In the above pipeline we are using a configuration that performs vehicle detection. This model was specified in sample.txt configuration file (found in **config** directory).
+In the above pipeline we are using a configuration that performs vehicle detection. This model was specified in inference.txt configuration file (found in **config** directory).
+
+#### Object Detection output:
+```json
+{
+  "timestamp": 144567314132175,
+  "inferences": [
+    {
+      "type": "entity",
+      "entity": {
+        "tag": {
+          "value": "Car",
+          "confidence": 0.6974523
+        },
+        "box": {
+          "l": 0.1671875,
+          "t": 0.013888889,
+          "w": 0.05625,
+          "h": 0.06944445
+        }
+      }
+    },
+    {
+      "type": "entity",
+      "entity": {
+        "tag": {
+          "value": "Car",
+          "confidence": 0.745077
+        },
+        "box": {
+          "l": 0.5203125,
+          "t": 0.2638889,
+          "w": 0.075,
+          "h": 0.097222224
+        }
+      }
+    },
+    {
+      "type": "entity",
+      "entity": {
+        "tag": {
+          "value": "Car",
+          "confidence": 0.60844123
+        },
+        "box": {
+          "l": 0.3546875,
+          "t": 0.66944444,
+          "w": 0.1578125,
+          "h": 0.31111112
+        }
+      }
+    }
+  ]
+}
+```
+
+### Classification
+
+To perform classification we can use [nvinfer](https://docs.nvidia.com/metropolis/deepstream/dev-guide/text/DS_plugin_gst-nvinfer.html?highlight=nvinfer) plugin. For that, use the GST_CLASSIFICATION_FILES environment variable to specify which configuration file the **nvinfer** plugins will use. This is a comma separated list of file names. In our example, the GST_CLASSIFICATION_FILES points to 2 configuration files for car color and type classification. You can find these files located under the **config** folder.
+
+```bash
+GST_CONFIG_FILE=inference.txt,
+GST_CLASSIFICATION_FILES=car_color.txt,car_type.txt
+```
+
+#### Steps:
+1. Open the deployment template file and update the **lvaExtension** module, you can change the configuration file to be used by modifying the **GST_CLASSIFICATION_FILES**. Note: if you want to change or use a new configuration file, you must save it under the **config** folder, rebuild the docker image and push the image to the registry container.
+
+```json
+  "lvaExtension" : {
+    "version": "1.0",
+    "type": "docker",
+    "status": "running",
+    "restartPolicy": "always",
+    "settings": {
+      "image": "<IMAGE_URI>",
+      "createOptions": {
+          "ExposedPorts": {
+            "80/tcp": {},
+            "5001/tcp" : {}
+        },
+        "Env":[
+            "MJPEG_OUTPUT=1",
+            "GST_CONFIG_FILE=inference.txt",
+            "GST_CLASSIFICATION_FILES=car_color.txt,car_type.txt"
+        ],                
+        "HostConfig": {
+            "PortBindings": {
+                "80/tcp": [
+                    {
+                        "HostPort": "8080"
+                    }
+                ],
+                "5001/tcp" : [
+                    {
+                        "HostPort" : "5001"
+                    }
+                ]
+            },
+            "LogConfig": {
+                "Type": "",
+                "Config": {
+                  "max-size": "10m",
+                  "max-file": "10"
+                }
+            },        
+            "IpcMode": "host",
+            "Runtime": "nvidia"
+        }
+      }
+    }
+  }
+```
+
+2. Redeploy to the Azure IoT Edge Device
+3. Run the topology
+
+In the above pipeline we are using a configuration that performs vehicle detection and classification. The models used are specified in the inference.txt, car_color.txt and car_type.txt configuration files (found in **config** directory). When classification is enabled, a new attribute named **attributes** will be added to output containing a list of classification properties detected.
+
+#### Classification output:
+```json
+{
+  "timestamp": 144567335002760,
+  "inferences": [
+    {
+      "type": "entity",
+      "entity": {
+        "tag": {
+          "value": "Car",
+          "confidence": 0.37137598
+        },
+        "attributes": [
+          {
+            "name": "color",
+            "value": "white",
+            "confidence": 0.98
+          },
+          {
+            "name": "type",
+            "value": "truck",
+            "confidence": 0.6
+          }
+        ],
+        "box": {
+          "l": 0.509375,
+          "t": 0.2638889,
+          "w": 0.0921875,
+          "h": 0.16111112
+        }
+      }
+    },
+    {
+      "type": "entity",
+      "entity": {
+        "tag": {
+          "value": "Car",
+          "confidence": 0.4088
+        },
+        "attributes": [
+          {
+            "name": "color",
+            "value": "white",
+            "confidence": 0.61
+          },
+          {
+            "name": "type",
+            "value": "sedan",
+            "confidence": 0.37
+          }
+        ],
+        "box": {
+          "l": 0.671875,
+          "t": 0.29444444,
+          "w": 0.0921875,
+          "h": 0.15555556
+        }
+      }
+    }
+  ]
+}
+```
+
+### Tracking
+
+To perform tracking we can use [nvtracker](https://docs.nvidia.com/metropolis/deepstream/dev-guide/text/DS_plugin_gst-nvtracker.html?highlight=nvtracker) plugin. For that, use the GST_TRACKER_FILE environment variable to specify which configuration file the **nvtracker** plugin will use. You can find this file located under the **config** folder.
+
+```bash
+GST_CONFIG_FILE=inference.txt,
+GST_CLASSIFICATION_FILES=car_color.txt,car_type.txt,
+GST_TRACKER_FILE=tracker.txt
+```
+
+#### Steps:
+1. Open the deployment template file and update the **lvaExtension** module, you can change the configuration file to be used by modifying the **GST_TRACKER_FILE**. Note: if you want to change or use a new configuration file, you must save it under the **config** folder, rebuild the docker image and push the image to the registry container.
+
+```json
+  "lvaExtension" : {
+    "version": "1.0",
+    "type": "docker",
+    "status": "running",
+    "restartPolicy": "always",
+    "settings": {
+      "image": "<IMAGE_URI>",
+      "createOptions": {
+          "ExposedPorts": {
+            "80/tcp": {},
+            "5001/tcp" : {}
+        },
+        "Env":[
+            "MJPEG_OUTPUT=1",
+            "GST_CONFIG_FILE=inference.txt",
+            "GST_CLASSIFICATION_FILES=car_color.txt,car_type.txt",
+            "GST_TRACKER_FILE=tracker.txt"
+        ],                
+        "HostConfig": {
+            "PortBindings": {
+                "80/tcp": [
+                    {
+                        "HostPort": "8080"
+                    }
+                ],
+                "5001/tcp" : [
+                    {
+                        "HostPort" : "5001"
+                    }
+                ]
+            },
+            "LogConfig": {
+                "Type": "",
+                "Config": {
+                  "max-size": "10m",
+                  "max-file": "10"
+                }
+            },        
+            "IpcMode": "host",
+            "Runtime": "nvidia"
+        }
+      }
+    }
+  }
+```
+
+2. Redeploy to the Azure IoT Edge Device
+3. Run the topology
+
+In the above pipeline we are using a configuration that performs vehicle detection, classification and tracking. The models used are specified in the inference.txt, car_color.txt and car_type.txt configuration files for classification, and tracker.txt for tracking (found in **config** directory). When tracking is enabled, a new attribute named **id** will be added to output which will be assigned to each tracked object.
+
+#### Tracking output:
+```json
+{
+  "timestamp": 144567356123229,
+  "inferences": [
+    {
+      "type": "entity",
+      "entity": {
+        "tag": {
+          "value": "Car",
+          "confidence": 0.39052564
+        },
+        "box": {
+          "l": 0.1265625,
+          "t": 0,
+          "w": 0.0375,
+          "h": 0.03888889
+        },
+        "id": "28"
+      }
+    },
+    {
+      "type": "entity",
+      "entity": {
+        "tag": {
+          "value": "Car",
+          "confidence": 0.5340788
+        },
+        "attributes": [
+          {
+            "name": "color",
+            "value": "yellow",
+            "confidence": 0.39
+          },
+          {
+            "name": "type",
+            "value": "sedan",
+            "confidence": 0.35
+          }
+        ],
+        "box": {
+          "l": 0.24909234,
+          "t": 0.19442673,
+          "w": 0.07960143,
+          "h": 0.11331585
+        },
+        "id": "26"
+      }
+    },
+    {
+      "type": "entity",
+      "entity": {
+        "tag": {
+          "value": "Car",
+          "confidence": 0.37745652
+        },
+        "attributes": [
+          {
+            "name": "color",
+            "value": "blue",
+            "confidence": 0.66
+          },
+          {
+            "name": "type",
+            "value": "largevehicle",
+            "confidence": 0.29
+          }
+        ],
+        "box": {
+          "l": 0.5320589,
+          "t": 0.6744355,
+          "w": 0.14851782,
+          "h": 0.29045787
+        },
+        "id": "27"
+      }
+    }
+  ]
+}
+```

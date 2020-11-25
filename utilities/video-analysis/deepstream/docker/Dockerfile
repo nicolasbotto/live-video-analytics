@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/deepstream:5.0-20.07-devel
+FROM nvcr.io/nvidia/deepstream:5.0.1-20.09-devel
 
 USER root
 
@@ -7,7 +7,7 @@ RUN mkdir /app
 COPY ./app/*.py /app/
 COPY ./app/grpc-autogen/*.py /app/
 COPY ./app/gst-lva-extension/*.* /app/
-COPY ./app/config/*.txt /app/
+COPY ./app/config/*.* /app/
 
 # Install gstreamer-1.0-dev
 RUN apt-get update -y && \
@@ -61,5 +61,7 @@ EXPOSE 5001
 # Starts the LVA gRPC extension server
 WORKDIR /app
 COPY ./app/start.sh /app
+COPY ./app/bindings/pyds.so /app
+COPY ./app/bindings/pyds_tracker_meta.so /app
 RUN chmod +x /app/start.sh
 CMD exec /app/start.sh
