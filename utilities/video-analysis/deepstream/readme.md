@@ -35,6 +35,8 @@ Follow instruction in [Push and Pull Docker images - Azure Container Registry](h
 
 4. Install [Azure IoT Edge runtime](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge?tabs=linux) on the Azure GPU optimized VM.
 
+5. Register the [IoT Edge device](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-manual-provision-symmetric-key?view=iotedge-2018-06&tabs=azure-portal%2Clinux).
+
 ## Deployment
 
 To use the container you just built along with LVA, you can use the deployment manifest template located in deployment folder in conjunction with either the [C#](https://github.com/Azure-Samples/live-video-analytics-iot-edge-csharp) or [Python](https://github.com/Azure-Samples/live-video-analytics-iot-edge-python) samples for LVA on IoT Edge. Make sure to replace the image URI placeholder (*<IMAGE_URI>*) of the lvaExtension module with where you uploaded the container image you just built as shown in the excerpt below:
