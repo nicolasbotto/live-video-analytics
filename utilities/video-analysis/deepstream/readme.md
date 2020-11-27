@@ -27,35 +27,31 @@ docker build -f ./docker/Dockerfile -t lva-gst-deepstream:latest .
 Follow instruction in [Push and Pull Docker images - Azure Container Registry](http://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-docker-cli) to save the docker image in Azure Container Registry. Alternatively, you can upload the image to [docker hub](https://hub.docker.com).
 
 ## Getting Started
-1. Install the [requirements for running LVA Jupyter notebook](https://github.com/Azure/live-video-analytics/blob/master/utilities/video-analysis/notebooks/common/requirements.md) samples on your development PC.
+1. Follow the instructions for [setting up the required Azure resources](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#set-up-azure-resources). 
 
-2. On VSCode, [set up the environment](https://github.com/Azure/live-video-analytics/blob/master/utilities/video-analysis/notebooks/common/setup_environment.ipynb) so that we can test and deploy LVA.
+2. Create an Azure GPU optimized VM: The [LVA resources setup script](https://github.com/Azure/live-video-analytics/tree/master/edge/setup) creates by default an Azure CPU optimized VM but you must create a GPU accelerated VM. NVIDIA® DeepStream Software Development Kit (SDK) runs on NVIDIA® T4 and platforms such as NVIDIA® Jetson. If you don't have a physical IoT Edge device, you can [create an Azure virtual machine](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-portal) and configure it properly. We recommend creating a [NCasT4_v3-series](https://docs.microsoft.com/en-us/azure/virtual-machines/nct4-v3-series) size VM which are powered by NVIDIA Tesla T4 GPUS. Follow the intructions for setting up the environment. You will need a development PC and also an IoT Edge device to run LVA and LVA extension container.
 
-3. Create the required [Azure services](https://github.com/Azure/live-video-analytics/blob/master/utilities/video-analysis/notebooks/common/create_azure_services.ipynb).
+3. Install [NVIDIA GPU drivers on Linux N-series VM](https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/hpccompute-gpu-linux).
 
-4. Follow the intructions for setting up the environment. You will need a development PC and also an IoT Edge device to run LVA and LVA extension container. If you don't have a physical IoT Edge device, you can [create an Azure virtual machine](https://github.com/Azure/live-video-analytics/blob/master/utilities/video-analysis/notebooks/common/create_azure_vm.ipynb) and configure it properly. **Note:** You must create a GPU accelerated VM. NVIDIA® DeepStream Software Development Kit (SDK) runs on NVIDIA® T4 and platforms such as NVIDIA® Jetson. We recommend creating a [NCasT4_v3-series](https://docs.microsoft.com/en-us/azure/virtual-machines/nct4-v3-series) size VM which are powered by NVIDIA Tesla T4 GPUS.
-
-5. Install [NVIDIA GPU drivers on Linux N-series VM](https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/hpccompute-gpu-linux).
-6. Install [Azure IoT Edge runtime](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge?tabs=linux).
+4. Install [Azure IoT Edge runtime](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge?tabs=linux).
 
 ## Deployment
 
 To use the container you just built along with LVA, you can use the deployment manifest template located in deployment folder in conjunction with either the [C#](https://github.com/Azure-Samples/live-video-analytics-iot-edge-csharp) or [Python](https://github.com/Azure-Samples/live-video-analytics-iot-edge-python) samples for LVA on IoT Edge. Make sure to replace the image URI placeholder (*<IMAGE_URI>*) of the lvaExtension module with where you uploaded the container image you just built as shown in the excerpt below:
 
 ```bash
-    "lvaExtension" : {
-            "version": "1.0",
-            "type": "docker",
-            "status": "running",
-            "restartPolicy": "always",
-            "settings": {
-              "image": "<IMAGE_URI>",
-              "createOptions": {
-                  "ExposedPorts": {
-                    "80/tcp": {},
-                    "5001/tcp" : {}
-                },
-            
+  "lvaExtension" : {
+    "version": "1.0",
+    "type": "docker",
+    "status": "running",
+    "restartPolicy": "always",
+    "settings": {
+      "image": "<IMAGE_URI>",
+      "createOptions": {
+          "ExposedPorts": {
+            "80/tcp": {},
+            "5001/tcp" : {}
+        }            
 ```
 
 ## Testing
