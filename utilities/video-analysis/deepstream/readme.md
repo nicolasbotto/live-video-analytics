@@ -37,9 +37,12 @@ Follow instruction in [Push and Pull Docker images - Azure Container Registry](h
 
 5. Register the [IoT Edge device](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-manual-provision-symmetric-key?view=iotedge-2018-06&tabs=azure-portal%2Clinux).
 
-## Deployment
+6. Follow the instructions for [setting up the development environment](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#set-up-your-development-environment).
 
-To use the container you just built along with LVA, you can use the deployment manifest template located in deployment folder in conjunction with either the [C#](https://github.com/Azure-Samples/live-video-analytics-iot-edge-csharp) or [Python](https://github.com/Azure-Samples/live-video-analytics-iot-edge-python) samples for LVA on IoT Edge. Make sure to replace the image URI placeholder (*<IMAGE_URI>*) of the lvaExtension module with where you uploaded the container image you just built as shown in the excerpt below:
+## Deployment
+Please follow the instructions for [Generating and deploying the deployment manifest](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#generate-and-deploy-the-deployment-manifest).
+
+To use the container you just built along with LVA, you can use the deployment manifest template **deployment.deepstream.template.json** located in deployment folder in conjunction with either the [C#](https://github.com/Azure-Samples/live-video-analytics-iot-edge-csharp) or [Python](https://github.com/Azure-Samples/live-video-analytics-iot-edge-python) samples for LVA on IoT Edge. Make sure to replace the image URI placeholder (*<IMAGE_URI>*) of the lvaExtension module with where you uploaded the container image you just built as shown in the excerpt below:
 
 ```bash
   "lvaExtension" : {
@@ -140,6 +143,8 @@ Log into the IoT Edge device, change to the directory: **/home/lvaadmin/samples/
 wget https://lvamedia.blob.core.windows.net/public/camera-300s.mkv
 ```
 
+To run the topology, follow [this instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#prepare-to-monitor-events).
+
 ### Monitoring
 
 Run the following command to monitor the logs from the lvaExtension docker container
@@ -220,6 +225,8 @@ GST_CONFIG_FILE=inference.txt
 3. Run the topology
 
 In the above pipeline we are using a configuration that performs vehicle detection. This model was specified in inference.txt configuration file (found in **config** directory).
+
+4. Monitor events, follow [this instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#prepare-to-monitor-events) to start monitoring built-in events.
 
 #### Object Detection output:
 ```json
@@ -337,6 +344,8 @@ GST_CLASSIFICATION_FILES=car_color.txt,car_type.txt
 3. Run the topology
 
 In the above pipeline we are using a configuration that performs vehicle detection and classification. The models used are specified in the inference.txt, car_color.txt and car_type.txt configuration files (found in **config** directory). When classification is enabled, a new attribute named **attributes** will be added to output containing a list of classification properties detected.
+
+4. Monitor events, follow [this instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#prepare-to-monitor-events) to start monitoring built-in events.
 
 #### Classification output:
 ```json
@@ -465,6 +474,8 @@ GST_TRACKER_FILE=tracker.txt
 3. Run the topology
 
 In the above pipeline we are using a configuration that performs vehicle detection, classification and tracking. The models used are specified in the inference.txt, car_color.txt and car_type.txt configuration files for classification, and tracker.txt for tracking (found in **config** directory). When tracking is enabled, a new attribute named **id** will be added to output which will be assigned to each tracked object.
+
+4. Monitor events, follow [this instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#prepare-to-monitor-events) to start monitoring built-in events.
 
 #### Tracking output:
 ```json
