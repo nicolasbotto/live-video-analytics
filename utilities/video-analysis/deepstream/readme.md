@@ -143,7 +143,7 @@ Log into the IoT Edge device, change to the directory: **/home/lvaadmin/samples/
 wget https://lvamedia.blob.core.windows.net/public/camera-300s.mkv
 ```
 
-To run the topology, follow [this instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#prepare-to-monitor-events).
+To run the topology, follow [this instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#run-the-sample-program).
 
 ### Monitoring
 
