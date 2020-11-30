@@ -143,7 +143,17 @@ Log into the IoT Edge device, change to the directory: **/home/lvaadmin/samples/
 wget https://lvamedia.blob.core.windows.net/public/camera-300s.mkv
 ```
 
-To run the topology, follow [this instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#run-the-sample-program).
+To run the topology, follow [this instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#run-the-sample-program). As this sample uses a different topology than the one mentioned in the instructions, please follow the next steps to point to the correct topology:
+
+### Edit the **operations.json** file:
+
+1. Change the link to the graph topology:
+**"topologyUrl"** : "https://raw.githubusercontent.com/Azure/live-video-analytics/master/MediaGraph/topologies/grpcExtension/topology.json"
+2. Under **GraphInstanceSet**, edit the name of the graph topology to match the value in the preceding link:
+"topologyName" : "InferencingWithGrpcExtension"
+3. Under **GraphTopologyDelete**, edit the name:
+"name" : "InferencingWithGrpcExtension"
+
 
 ### Monitoring
 
@@ -155,7 +165,9 @@ docker logs lvaExtension -f
 
 ### Visualizing output
 
-You can view the video passing through the GStreamer pipeline by opening a browser on your host machine with URL as [http://127.0.0.1:8080/stream/SampleGraph1](http://127.0.0.1:8080/stream/SampleGraph1).
+You can view the video passing through the GStreamer pipeline by opening a browser on your host machine with URL as [http://127.0.0.1:8080/stream/SampleGraph1](http://127.0.0.1:8080/stream/SampleGraph1). 
+
+In case you are using an Azure VM, please use its Public IP address in the URL. **http://[VM PUBLIC IP]]:8080/stream/SampleGraph1** and ensure that port 8080 accessible.
 
 ![Image](./images/mjpeg_stream.png)
 
