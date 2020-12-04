@@ -24,7 +24,7 @@ docker build -f ./docker/Dockerfile -t lva-gst-deepstream:latest .
 
 ## Push image to a container registry
 
-Follow instruction in [Push and Pull Docker images - Azure Container Registry](http://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-docker-cli) to save the docker image in Azure Container Registry. Alternatively, you can upload the image to [docker hub](https://hub.docker.com).
+Follow instruction on the `/utilities/video-analysis/readme.md`, in the section [Instructions on pushing the container image to Azure Container Registry](../readme.md#instructions-on-pushing-the-container-image-to-azure-container-registry).
 
 ## Getting Started
 1. Install the [requirements for running LVA Jupyter notebook](https://github.com/Azure/live-video-analytics/blob/master/utilities/video-analysis/notebooks/common/requirements.md) samples on your development PC.
