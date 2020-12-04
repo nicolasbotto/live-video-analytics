@@ -1,5 +1,5 @@
 {
-    "@apiVersion": "1.0",
+    "@apiVersion": "2.0",
     "name": "CVRWithMotionDetection",
     "properties": {
         "description": "Continuous video recording with Motion Detection",
@@ -56,7 +56,14 @@
                 "sensitivity": "${motionSensitivity}",
                 "inputs": [
                     {
-                        "nodeName": "rtspSource"
+                        "nodeName": "rtspSource",
+                        "outputSelectors": [
+                            {
+                              "property": "mediaType",
+                              "operator": "is",
+                              "value": "video"
+                            }
+                          ]
                     }
                 ]
             }
@@ -81,7 +88,14 @@
                 "localMediaCachePath": "/var/lib/azuremediaservices/tmp/",
                 "inputs": [
                     {
-                        "nodeName": "rtspSource"
+                        "nodeName": "rtspSource",
+                        "outputSelectors": [
+                            {
+                              "property": "mediaType",
+                              "operator": "is",
+                              "value": "video"
+                            }
+                          ]
                     }
                 ]
             }            

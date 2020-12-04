@@ -1,6 +1,6 @@
 {
     "name": "CVRToAMSAsset",
-    "@apiVersion": "1.0",
+    "@apiVersion": "2.0",
     "properties": {
         "description": "Continuous video recording to an Azure Media Services Asset",
         "parameters": [
@@ -48,7 +48,14 @@
                 "localMediaCachePath": "/var/lib/azuremediaservices/tmp/",
                 "inputs": [
                     {
-                        "nodeName": "rtspSource"
+                        "nodeName": "rtspSource",
+                        "outputSelectors": [
+                            {
+                              "property": "mediaType",
+                              "operator": "is",
+                              "value": "video"
+                            }
+                          ]
                     }
                 ]
             }
