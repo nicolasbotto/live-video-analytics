@@ -83,7 +83,7 @@
 				"name": "assetSink",
 				"assetNamePattern": "sampleAssetFromEVR-LVAEdge-${System.DateTime}",
 				"segmentLength": "PT30S",
-				"LocalMediaCacheMaximumSizeMiB": "200",
+				"localMediaCacheMaximumSizeMiB": "200",
 				"localMediaCachePath": "/var/lib/azuremediaservices/tmp/",
 				"inputs": [
 					{
