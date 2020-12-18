@@ -39,6 +39,36 @@ Follow instruction in [Push and Pull Docker images - Azure Container Registry](h
 
 6. Follow the instructions for [setting up the development environment](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#set-up-your-development-environment).
 
+7. Install Docker Engine:
+```bash
+sudo apt-get -y update && \
+sudo apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common && \
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && \
+sudo apt-key fingerprint 0EBFCD88 && \
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && \
+sudo apt-get -y update && \
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+```
+
+8. Install NVIDIA Container Toolkit:
+```bash
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - && \
+curl -s -L https://nvidia.github.io/nvidia-docker/ubuntu18.04/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list && \
+sudo apt-get -y update && \
+sudo apt-get install -y nvidia-docker2
+```
+
+Verify NVIDIA runtime:
+```bash
+sudo systemctl restart docker
+sudo docker run --runtime nvidia nvidia/cuda:10.1-base nvidia-smi
+```
+
 ## Deployment
 Please follow the instructions for [Generating and deploying the deployment manifest](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#generate-and-deploy-the-deployment-manifest).
 
