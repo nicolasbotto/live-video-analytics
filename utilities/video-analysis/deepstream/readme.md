@@ -18,8 +18,16 @@ Additional open source technologies included are [nginx](https://www.nginx.com/)
 
 Build the container image (should take some minutes) by running the following Docker command from the same directory as this readme file.
 
+Note: NVIDIA® DeepStream Software Development Kit (SDK) runs on NVIDIA® T4 and platforms such as NVIDIA® Jetson. Below are the steps for both supported platforms:
+
+### T4:
 ```bash
 docker build -f ./docker/Dockerfile -t lva-gst-deepstream:latest .
+```
+
+### Jetson:
+```bash
+docker build -f ./docker/Dockerfile-jetson -t lva-gst-deepstream:latest .
 ```
 
 ## Push image to a container registry
@@ -29,7 +37,11 @@ Follow instruction in [Push and Pull Docker images - Azure Container Registry](h
 ## Getting Started
 1. Follow the instructions for [setting up the required Azure resources](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#set-up-azure-resources). 
 
-2. Create an Azure GPU optimized VM: The [LVA resources setup script](https://github.com/Azure/live-video-analytics/tree/master/edge/setup) creates, by default, an Azure CPU optimized VM but you must create a GPU accelerated VM. NVIDIA® DeepStream Software Development Kit (SDK) runs on NVIDIA® T4. If you don't have a physical IoT Edge device, you can [create an Azure virtual machine](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-portal) and configure it properly. We recommend creating a [NCasT4_v3-series](https://docs.microsoft.com/en-us/azure/virtual-machines/nct4-v3-series) size VM which are powered by NVIDIA Tesla T4 GPUS. Follow the intructions for setting up the environment. You will need a development PC and also an IoT Edge device to run LVA and LVA extension container.
+2. NVIDIA® DeepStream Software Development Kit (SDK) runs on NVIDIA® T4 and platforms such as NVIDIA® Jetson. Below are the steps for both supported platforms:
+
+### T4: 
+
+1. Create an Azure GPU optimized VM: The [LVA resources setup script](https://github.com/Azure/live-video-analytics/tree/master/edge/setup) creates, by default, an Azure CPU optimized VM but you must create a GPU accelerated VM. If you don't have a physical IoT Edge device, you can [create an Azure virtual machine](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-portal) and configure it properly. We recommend creating a [NCasT4_v3-series](https://docs.microsoft.com/en-us/azure/virtual-machines/nct4-v3-series) size VM which are powered by NVIDIA Tesla T4 GPUS. Follow the intructions for setting up the environment. You will need a development PC and also an IoT Edge device to run LVA and LVA extension container.
 
 3. Install [NVIDIA GPU drivers on Linux N-series VM](https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/hpccompute-gpu-linux) on the Azure GPU optimized VM.
 
@@ -56,6 +68,53 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 ```
 
 8. Install NVIDIA Container Toolkit:
+```bash
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - && \
+curl -s -L https://nvidia.github.io/nvidia-docker/ubuntu18.04/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list && \
+sudo apt-get -y update && \
+sudo apt-get install -y nvidia-docker2
+```
+
+Verify NVIDIA runtime:
+```bash
+sudo systemctl restart docker
+sudo docker run --runtime nvidia nvidia/cuda:10.1-base nvidia-smi
+```
+
+### Jetson: 
+
+1. DeepStream 5.1 requires JetPack 4.5 or above, if you're Jetson device has a lower version, please update it by following this [instructions](https://docs.nvidia.com/jetson/jetpack/install-jetpack/index.html).
+
+2. Remove older version of Docker installed by JetPack. Run the following commands in the Jetson device:
+
+```bash
+sudo apt-get update
+sudo apt autoremove
+```
+
+3. Install [Azure IoT Edge runtime](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge?tabs=linux).
+
+4. Register the [IoT Edge device](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-manual-provision-symmetric-key?view=iotedge-2018-06&tabs=azure-portal%2Clinux).
+
+5. Follow the instructions for [setting up the development environment](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#set-up-your-development-environment).
+
+6. Install Docker Engine:
+```bash
+sudo apt-get -y update && \
+sudo apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common && \
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && \
+sudo apt-key fingerprint 0EBFCD88 && \
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && \
+sudo apt-get -y update && \
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+```
+
+7. Install NVIDIA Container Toolkit:
 ```bash
 curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - && \
 curl -s -L https://nvidia.github.io/nvidia-docker/ubuntu18.04/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list && \
@@ -97,12 +156,12 @@ To test the docker container you will need to create a graph topology with gRPC 
 
 ```JSON
 {
-    "apiVersion": "1.0",
+    "apiVersion": "2.0",
     "operations": [
         {
             "opName": "GraphTopologySet",
             "opParams": {
-                "topologyFile": "deepstream.json"
+                "topologyUrl": "https://raw.githubusercontent.com/Azure/live-video-analytics/master/MediaGraph/topologies/grpcExtension/2.0/topology.json"
             }
         },
         {
