@@ -83,7 +83,7 @@ sudo docker run --runtime nvidia nvidia/cuda:10.1-base nvidia-smi
 
 ### Jetson: 
 
-1. DeepStream 5.1 requires JetPack 4.5 or above, if you're Jetson device has a lower version, please update it by following this [instructions](https://docs.nvidia.com/jetson/jetpack/install-jetpack/index.html).
+1. DeepStream 5.1 requires JetPack 4.5 or above, if the Jetson device you are using has a lower version, please update it by following this [instructions](https://docs.nvidia.com/jetson/jetpack/install-jetpack/index.html).
 
 2. Remove older version of Docker installed by JetPack. Run the following commands in the Jetson device:
 
