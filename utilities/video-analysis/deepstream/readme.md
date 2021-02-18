@@ -232,7 +232,7 @@ Log into the IoT Edge device, change to the directory: **/home/lvaadmin/samples/
 wget https://lvamedia.blob.core.windows.net/public/camera-300s.mkv
 ```
 
-To run the topology, follow [this instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#run-the-sample-program). As this sample uses a different topology than the one mentioned in the instructions, please follow the next steps to point to the correct topology:
+To run the topology, follow [these instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#run-the-sample-program). As this sample uses a different topology than the one mentioned in the instructions, please follow the next steps to point to the correct topology:
 
 ### Edit the **operations.json** file:
 
@@ -327,7 +327,7 @@ GST_CONFIG_FILE=inference.txt
 
 In the above pipeline we are using a configuration that performs vehicle detection. This model was specified in inference.txt configuration file (found in **config** directory).
 
-4. Monitor events, follow [this instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#prepare-to-monitor-events) to start monitoring built-in events.
+4. Monitor events, follow [these instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#prepare-to-monitor-events) to start monitoring built-in events.
 
 #### Object Detection output:
 ```json
@@ -446,7 +446,7 @@ GST_CLASSIFICATION_FILES=car_color.txt,car_type.txt
 
 In the above pipeline we are using a configuration that performs vehicle detection and classification. The models used are specified in the inference.txt, car_color.txt and car_type.txt configuration files (found in **config** directory). When classification is enabled, a new attribute named **attributes** will be added to output containing a list of classification properties detected.
 
-4. Monitor events, follow [this instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#prepare-to-monitor-events) to start monitoring built-in events.
+4. Monitor events, follow [these instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#prepare-to-monitor-events) to start monitoring built-in events.
 
 #### Classification output:
 ```json
@@ -576,7 +576,7 @@ GST_TRACKER_FILE=tracker.txt
 
 In the above pipeline we are using a configuration that performs vehicle detection, classification and tracking. The models used are specified in the inference.txt, car_color.txt and car_type.txt configuration files for classification, and tracker.txt for tracking (found in **config** directory). When tracking is enabled, a new attribute named **id** will be added to output which will be assigned to each tracked object.
 
-4. Monitor events, follow [this instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#prepare-to-monitor-events) to start monitoring built-in events.
+4. Monitor events, follow [these instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#prepare-to-monitor-events) to start monitoring built-in events.
 
 #### Tracking output:
 ```json
