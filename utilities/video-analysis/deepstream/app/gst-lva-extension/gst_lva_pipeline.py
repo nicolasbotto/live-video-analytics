@@ -26,6 +26,7 @@ import media_pb2
 import extension_pb2
 import configparser
 import pyds_tracker_meta
+import platform
 
 PGIE_CLASS_ID_VEHICLE_COLOR = 2
 PGIE_CLASS_ID_VEHICLE_TYPE = 3
@@ -69,6 +70,9 @@ class Gst_Lva_Pipeline:
 		self.is_push_buffer_allowed = None
 		self._mainloop = GObject.MainLoop()
 
+		# Set memory type depending platform (T4 or Jetson)
+		nv_memory_type = 1 if (platform.uname().machine == 'x86_64') else 4
+
 		configFile = os.environ.get('GST_CONFIG_FILE')
 		if (configFile is None):
 			configFile = "inference.txt"	
@@ -77,7 +81,7 @@ class Gst_Lva_Pipeline:
 
 		classificationFile = os.environ.get('GST_CLASSIFICATION_FILES')
 		
-		pipelineHeader = "appsrc name=lvasource ! videoconvert ! nvvideoconvert nvbuf-memory-type=1 ! capsfilter caps=video/x-raw(memory:NVMM) ! m.sink_0 nvstreammux name=m batch-size=1 width={} height={} batched-push-timeout=33000 nvbuf-memory-type=1 ! nvinfer name=primary-inference config-file-path={} ! ".format(width, height, configFile)
+		pipelineHeader = "appsrc name=lvasource ! videoconvert ! nvvideoconvert nvbuf-memory-type={0} ! capsfilter caps=video/x-raw(memory:NVMM) ! m.sink_0 nvstreammux name=m batch-size=1 width={1} height={2} batched-push-timeout=33000 nvbuf-memory-type={0} ! nvinfer name=primary-inference config-file-path={3} ! ".format(nv_memory_type, width, height, configFile)
 		
 		pipelineTracker = ""
 		
@@ -115,7 +119,7 @@ class Gst_Lva_Pipeline:
 			for file in classificationFile.split(','):
 				pipelineClassifiers += " nvinfer config-file-path={} !".format(file)
 
-		pipelineFooter = " nvvideoconvert name=converter nvbuf-memory-type=1 ! videoconvert ! video/x-raw,format=RGB ! appsink name=lvasink"
+		pipelineFooter = " nvvideoconvert name=converter nvbuf-memory-type={} ! videoconvert ! video/x-raw,format=RGB ! appsink name=lvasink".format(nv_memory_type)
 		
 		pipeline = pipelineHeader + pipelineTracker + pipelineClassifiers + pipelineFooter
 
