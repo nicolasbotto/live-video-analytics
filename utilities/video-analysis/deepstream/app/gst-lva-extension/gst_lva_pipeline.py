@@ -25,7 +25,6 @@ import inferencing_pb2
 import media_pb2
 import extension_pb2
 import configparser
-import pyds_tracker_meta
 import platform
 
 PGIE_CLASS_ID_VEHICLE_COLOR = 2
