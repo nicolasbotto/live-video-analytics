@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/deepstream:5.0.1-20.09-devel
+FROM nvcr.io/nvidia/deepstream:5.1-21.02-samples
 
 USER root
 
@@ -21,6 +21,8 @@ RUN mkdir -p /app/build && \
     cd /app/build && \
     cmake .. && \
     make
+
+RUN apt-get -y install python3-gst-1.0
 
 # Install required python packages 
 RUN pip3 install requests pyyaml protobuf grpcio && \

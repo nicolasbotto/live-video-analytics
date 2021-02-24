@@ -31,8 +31,7 @@
 tracker-width=480
 tracker-height=288
 gpu-id=0
-#ll-lib-file=/opt/nvidia/deepstream/deepstream-5.0/lib/libnvds_mot_klt.so
-ll-lib-file=/opt/nvidia/deepstream/deepstream-5.0/lib/libnvds_nvdcf.so
+ll-lib-file=/opt/nvidia/deepstream/deepstream-5.1/lib/libnvds_nvdcf.so
 ll-config-file=tracker_config.yaml
 enable-batch-process=1
 #useBufferedOutput=1
