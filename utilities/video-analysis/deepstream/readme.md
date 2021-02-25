@@ -93,7 +93,7 @@ To use the container you just built along with LVA, you can use the deployment m
 
 If you look at the lvaExtension module in the deployment manifest you will see that it exposes ports 80 and 5001 mapped to host ports 8080 and 5001 respectively. There are also two environment variables "MJPEG_OUTPUT" and "GST_CONFIG_FILE". MJPEG_OUTPUT means that the container will output a MJPEG stream from the GStreamer pipeline and [GST_CONFIG_FILE](https://docs.nvidia.com/metropolis/deepstream/dev-guide/index.html#page/DeepStream%20Plugins%20Development%20Guide/deepstream_plugin_details.html#wwpID0E04DB0HA) defines the DeepStream pipeline.
 
-To test the docker container you will need to create a graph topology with gRPC extension or you can use the sample [topology](https://raw.githubusercontent.com/Azure/live-video-analytics/master/MediaGraph/topologies/grpcExtension/topology.json) and then create a graph instance based on that topology. You can do so using LVA on IoT Edge [C#](https://github.com/Azure-Samples/live-video-analytics-iot-edge-csharp) or [Python](https://github.com/Azure-Samples/live-video-analytics-iot-edge-python) sample code. Use the following JSON for operations.json.
+To test the docker container you will need to create a graph topology with gRPC extension or you can use the sample topology named **grpcExtension.json** located in the **topology folder** and then create a graph instance based on that topology. You can do so using LVA on IoT Edge [C#](https://github.com/Azure-Samples/live-video-analytics-iot-edge-csharp) or [Python](https://github.com/Azure-Samples/live-video-analytics-iot-edge-python) sample code. Use the following JSON for operations.json.
 
 ```JSON
 {
@@ -102,7 +102,7 @@ To test the docker container you will need to create a graph topology with gRPC 
         {
             "opName": "GraphTopologySet",
             "opParams": {
-                "topologyUrl": "https://raw.githubusercontent.com/Azure/live-video-analytics/master/MediaGraph/topologies/grpcExtension/2.0/topology.json"
+                "topologyFile": "<PATH_TO_grpcExtension.json>"
             }
         },
         {
@@ -178,7 +178,7 @@ To run the topology, follow [these instructions](https://docs.microsoft.com/en-u
 ### Edit the **operations.json** file:
 
 1. Change the link to the graph topology:
-**"topologyUrl"** : "https://raw.githubusercontent.com/Azure/live-video-analytics/master/MediaGraph/topologies/grpcExtension/topology.json"
+**"topologyFile"** : "path to the grpcExtension.json file"
 2. Under **GraphInstanceSet**, edit the name of the graph topology to match the value in the preceding link:
 "topologyName" : "InferencingWithGrpcExtension"
 3. Under **GraphTopologyDelete**, edit the name:
