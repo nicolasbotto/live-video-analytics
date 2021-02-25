@@ -115,7 +115,7 @@ To test the docker container you will need to create a graph topology with gRPC 
                     "parameters": [
                         {
                             "name": "rtspUrl",
-                            "value": "rtsp://rtspsim:554/media/camera-300s.mkv"
+                            "value": "rtsp://rtspsim:554/media/co-final.mkv"
                         },
                         {
                             "name": "rtspUserName",
@@ -170,7 +170,7 @@ To test the docker container you will need to create a graph topology with gRPC 
 Log into the IoT Edge device, change to the directory: **/home/lvaadmin/samples/input/** and run the following command:
 
 ```bash
-wget https://lvamedia.blob.core.windows.net/public/camera-300s.mkv
+wget https://lvamedia.blob.core.windows.net/public/co-final.mkv
 ```
 
 To run the topology, follow [these instructions](https://docs.microsoft.com/en-us/azure/media-services/live-video-analytics-edge/detect-motion-emit-events-quickstart?pivots=programming-language-csharp#run-the-sample-program). As this sample uses a different topology than the one mentioned in the instructions, please follow the next steps to point to the correct topology:
