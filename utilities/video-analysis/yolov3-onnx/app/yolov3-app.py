@@ -179,7 +179,7 @@ def stream(id):
                 "<img src=\"/mjpeg/" + id + "\"/>"
                 "</html>")
 
-    return Response(respBody, status= 200)
+    return Response(respBody, status=200)
 
 # /score routes to scoring function 
 # This function returns a JSON object with inference duration and detected objects

@@ -1,14 +1,9 @@
 {
-    "@apiVersion": "1.0",
+    "@apiVersion": "2.0",
     "name": "LvaIotcObjectDetection",
     "properties": {
         "description": "Event-based video recording to Assets based on motion events, and using HTTP Extension to send images to an external inference engine",
         "parameters": [
-            {
-                "name": "rtspUrl",
-                "type": "String",
-                "description": "rtsp Url"
-            },
             {
                 "name": "rtspAuthUsername",
                 "type": "String",
@@ -22,6 +17,11 @@
                 "default": "password"
             },
             {
+                "name": "rtspUrl",
+                "type": "String",
+                "description": "rtsp Url"
+            },
+            {
                 "name": "assetName",
                 "type": "String",
                 "description": "name of the AMS CVR asset",
@@ -30,8 +30,7 @@
             {
                 "name": "inferencingUrl",
                 "type": "String",
-                "description": "inferencing Url",
-                "default": "http://lvaYolov3/score"
+                "description": "inferencing Url"
             },
             {
                 "name": "inferencingUserName",
@@ -46,16 +45,22 @@
                 "default": "password"
             },
             {
-                "name": "frameRate",
-                "type": "Double",
-                "description": "inferencing frame rate",
-                "default": 2
+                "name": "imageScaleMode",
+                "type": "String",
+                "description": "image scaling mode",
+                "default": "preserveAspectRatio"
             },
             {
-                "name": "imageEncoding",
+                "name": "frameWidth",
                 "type": "String",
-                "description": "image encoding for frames",
-                "default": "bmp"
+                "description": "Width of the video frame to be received from LVA.",
+                "default": "416"
+            },
+            {
+                "name": "frameHeight",
+                "type": "String",
+                "description": "Height of the video frame to be received from LVA.",
+                "default": "416"
             },
             {
                 "name": "hubSinkOutputName",
@@ -68,6 +73,7 @@
             {
                 "@type": "#Microsoft.Media.MediaGraphRtspSource",
                 "name": "rtspSource",
+                "transport": "tcp",
                 "endpoint": {
                     "@type": "#Microsoft.Media.MediaGraphUnsecuredEndpoint",
                     "url": "${rtspUrl}",
@@ -80,16 +86,6 @@
             }
         ],
         "processors": [
-            {
-                "@type": "#Microsoft.Media.MediaGraphFrameRateFilterProcessor",
-                "name": "frameRateFilter",
-                "inputs": [
-                    {
-                        "nodeName": "rtspSource"
-                    }
-                ],
-                "maximumFps": "${frameRate}"
-            },
             {
                 "@type": "#Microsoft.Media.MediaGraphHttpExtension",
                 "name": "httpExtension",
@@ -104,18 +100,28 @@
                 },
                 "image": {
                     "scale": {
-                        "mode": "preserveAspectRatio",
-                        "width": "416",
-                        "height": "416"
+                        "mode": "${imageScaleMode}",
+                        "width": "${frameWidth}",
+                        "height": "${frameHeight}"
                     },
                     "format": {
-                        "@type": "#Microsoft.Media.MediaGraphImageFormatEncoded",
-                        "encoding": "${imageEncoding}"
+                        "@type": "#Microsoft.Media.MediaGraphImageFormatBmp"
                     }
+                },
+                "samplingOptions": {
+                    "skipSamplesWithoutAnnotation": "false",
+                    "maximumSamplesPerSecond": "5"
                 },
                 "inputs": [
                     {
-                        "nodeName": "frameRateFilter"
+                        "nodeName": "rtspSource",
+                        "outputSelectors": [
+                            {
+                                "property": "mediaType",
+                                "operator": "is",
+                                "value": "video"
+                            }
+                        ]
                     }
                 ]
             }

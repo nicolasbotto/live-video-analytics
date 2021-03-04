@@ -12,16 +12,16 @@ const composeOptions: ComposeOptions = {
     relativeTo: __dirname,
     logCompose: {
         serializers: {
-            req: (req) => {
-                return `${(req.method || '').toUpperCase()} ${req.url?.origin} ${req.url?.pathname}`;
+            req: (req: any) => {
+                return `${(req.method || '').toUpperCase()} ${req.headers?.host} ${req.url}`;
             },
-            res: (res) => {
+            res: (res: any) => {
                 return `${res.statusCode} ${res.raw?.statusMessage}`;
             },
-            tags: (tags) => {
+            tags: (tags: any) => {
                 return `[${tags}]`;
             },
-            responseTime: (responseTime) => {
+            responseTime: (responseTime: any) => {
                 return `${responseTime}ms`;
             }
         },
@@ -35,10 +35,10 @@ const composeOptions: ComposeOptions = {
 };
 
 // process.on('unhandledRejection', (e: any) => {
-//     // tslint:disable:no-console
+/* eslint-disable */
 //     console.log(['startup', 'error'], `Excepction on startup... ${e.message}`);
 //     console.log(['startup', 'error'], e.stack);
-//     // tslint:enable:no-console
+/* eslint-enable */
 // });
 
 async function start() {
@@ -71,7 +71,7 @@ async function start() {
         server.log(['startup', 'info'], `📸 Finished module initialization`);
     }
     catch (error) {
-        // tslint:disable-next-line:no-console
+        // eslint-disable-next-line no-console
         console.log(`['startup', 'error'], 👹 Error starting server: ${error.message}`);
     }
 }
