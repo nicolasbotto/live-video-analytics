@@ -1,6 +1,9 @@
-# GStreamer with video analytics plugins from NVIDIA DeepStream
+# Live video analytics (LVA) with NVIDIA DeepStream
 
 The following instructions will enable you to build a Docker container with a [gRPC](https://grpc.io/) server that can receive messages from LVA on IoT Edge module, and use a [GStreamer](https://gstreamer.freedesktop.org/) pipeline with video analytics plugins from [NVIDIA DeepStream](https://docs.nvidia.com/metropolis/deepstream/dev-guide/index.html) (licensed under MIT license).
+
+![Image](./images/topology_nvidia_deepstream.png)
+
 
 Additional open source technologies included are [nginx](https://www.nginx.com/), [gunicorn](https://gunicorn.org/), [flask](https://github.com/pallets/flask), [runit](http://smarden.org/runit/), and [pillow](https://pillow.readthedocs.io/en/stable/index.html).
 
